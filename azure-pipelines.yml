@@ -1,0 +1,30 @@
+# This yml file helps to build and push docker image to ACR
+
+
+
+
+trigger:
+- master
+
+pool: agent-local
+  
+steps:
+- script: 
+    mvn clean install
+    
+- task: Docker@2
+  inputs:
+    containerRegistry: 'Docker Registry'
+    repository: 'registry0015'
+    command: 'build'
+    Dockerfile: '**/Dockerfile'
+  displayName: 'docker image build'
+
+
+- task: Docker@2
+  inputs:
+    containerRegistry: 'Docker Registry'
+    repository: 'registry0015'                #here registry0015 is the repository in Azure portal
+    command: 'push'
+  displayName: 'docker image push'
+  
